@@ -1,24 +1,6 @@
 <script setup lang="ts">
 import type { ColumnType } from 'nocodb-sdk'
 import type { Ref } from 'vue'
-import {
-  ActiveCellInj,
-  CellValueInj,
-  ColumnInj,
-  IsFormInj,
-  IsUnderLookupInj,
-  ReadonlyInj,
-  ReloadRowDataHookInj,
-  RowInj,
-  computed,
-  createEventHook,
-  inject,
-  ref,
-  useProvideLTARStore,
-  useRoles,
-  useSelectedCellKeyupListener,
-  useSmartsheetRowStoreOrThrow,
-} from '#imports'
 
 const column = inject(ColumnInj)!
 
@@ -70,7 +52,7 @@ const unlinkRef = async (rec: Record<string, any>) => {
   }
 }
 
-useSelectedCellKeyupListener(active, (e: KeyboardEvent) => {
+useSelectedCellKeydownListener(active, (e: KeyboardEvent) => {
   switch (e.key) {
     case 'Enter':
       listItemsDlg.value = true
@@ -102,8 +84,8 @@ watch(
 
 <template>
   <LazyVirtualCellComponentsLinkRecordDropdown v-model:is-open="isOpen">
-    <div class="flex w-full chips-wrapper items-center" :class="{ active }">
-      <div class="nc-cell-field chips flex items-center flex-1">
+    <div class="nc-cell-field flex w-full chips-wrapper items-center min-h-4" :class="{ active }">
+      <div class="chips flex items-center flex-1 max-w-[calc(100%_-_16px)]">
         <template v-if="value && (relatedTableDisplayValueProp || relatedTableDisplayValuePropId)">
           <VirtualCellComponentsItemChip
             :item="value"
@@ -121,13 +103,17 @@ watch(
 
       <div
         v-if="!readOnly && (isUIAllowed('dataEdit') || isForm) && !isUnderLookup"
-        class="flex justify-end group gap-1 min-h-[30px] items-center"
+        class="flex justify-end group gap-1 min-h-4 items-center"
         tabindex="0"
         @keydown.enter.stop="listItemsDlg = true"
       >
         <GeneralIcon
           :icon="addIcon"
-          class="select-none !text-md text-gray-700 nc-action-icon nc-plus invisible group-hover:visible group-focus:visible"
+          class="select-none text-gray-700 nc-action-icon nc-plus invisible group-hover:visible group-focus:visible"
+          :class="{
+            '!text-[14px]': addIcon === 'expand',
+            '!text-md': addIcon !== 'expand',
+          }"
           @click.stop="listItemsDlg = true"
         />
       </div>

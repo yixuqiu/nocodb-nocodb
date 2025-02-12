@@ -1,24 +1,6 @@
 <script setup lang="ts">
 import type { ColumnType } from 'nocodb-sdk'
 import type { Ref } from 'vue'
-import {
-  ActiveCellInj,
-  CellValueInj,
-  ColumnInj,
-  IsFormInj,
-  IsUnderLookupInj,
-  ReadonlyInj,
-  ReloadRowDataHookInj,
-  RowInj,
-  computed,
-  createEventHook,
-  inject,
-  ref,
-  useProvideLTARStore,
-  useRoles,
-  useSelectedCellKeyupListener,
-  useSmartsheetRowStoreOrThrow,
-} from '#imports'
 
 const column = inject(ColumnInj)!
 
@@ -66,7 +48,7 @@ const unlinkRef = async (rec: Record<string, any>) => {
   }
 }
 
-useSelectedCellKeyupListener(active, (e: KeyboardEvent) => {
+useSelectedCellKeydownListener(active, (e: KeyboardEvent) => {
   switch (e.key) {
     case 'Enter':
       listItemsDlg.value = true
@@ -105,8 +87,8 @@ watch(value, (next) => {
 <template>
   <div class="flex w-full chips-wrapper items-center" :class="{ active }">
     <LazyVirtualCellComponentsLinkRecordDropdown v-model:is-open="isOpen">
-      <div class="flex items-center w-full">
-        <div class="nc-cell-field chips flex items-center flex-1">
+      <div class="nc-cell-field flex items-center w-full">
+        <div class="chips flex items-center flex-1" :class="{ 'max-w-[calc(100%_-_16px)]': !isUnderLookup }">
           <template v-if="value && (relatedTableDisplayValueProp || relatedTableDisplayValuePropId)">
             <VirtualCellComponentsItemChip
               :item="value"

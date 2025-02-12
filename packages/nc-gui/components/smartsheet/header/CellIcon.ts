@@ -1,42 +1,5 @@
 import { type ColumnType } from 'nocodb-sdk'
 import type { PropType } from '@vue/runtime-core'
-import {
-  ColumnInj,
-  computed,
-  defineComponent,
-  h,
-  iconMap,
-  inject,
-  isAttachment,
-  isBoolean,
-  isCurrency,
-  isDate,
-  isDateTime,
-  isDecimal,
-  isDuration,
-  isEmail,
-  isFloat,
-  isGeoData,
-  isGeometry,
-  isInt,
-  isJSON,
-  isPercent,
-  isPhoneNumber,
-  isPrimaryKey,
-  isRating,
-  isSet,
-  isSingleSelect,
-  isSpecificDBType,
-  isString,
-  isTextArea,
-  isTime,
-  isURL,
-  isUser,
-  isYear,
-  storeToRefs,
-  toRef,
-  useBase,
-} from '#imports'
 
 const renderIcon = (column: ColumnType, abstractType: any) => {
   if (isPrimaryKey(column)) {
@@ -57,12 +20,14 @@ const renderIcon = (column: ColumnType, abstractType: any) => {
     return iconMap.cellSingleSelect
   } else if (isBoolean(column, abstractType)) {
     return iconMap.cellCheckbox
+  } else if (isAI(column)) {
+    return iconMap.cellAi
   } else if (isTextArea(column)) {
     return iconMap.cellLongText
   } else if (isEmail(column)) {
     return iconMap.cellEmail
   } else if (isYear(column, abstractType)) {
-    return iconMap.cellDate
+    return iconMap.cellYear
   } else if (isTime(column, abstractType)) {
     return iconMap.cellTime
   } else if (isRating(column)) {

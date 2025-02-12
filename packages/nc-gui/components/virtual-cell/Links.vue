@@ -3,7 +3,6 @@ import { computed } from '@vue/reactivity'
 import type { ColumnType } from 'nocodb-sdk'
 import type { Ref } from 'vue'
 import { ref } from 'vue'
-import { ActiveCellInj, CellValueInj, ColumnInj, IsUnderLookupInj, inject, useSelectedCellKeyupListener } from '#imports'
 
 const value = inject(CellValueInj, ref(0))
 
@@ -94,7 +93,7 @@ const openChildList = () => {
   hideBackBtn.value = false
 }
 
-useSelectedCellKeyupListener(inject(ActiveCellInj, ref(false)), (e: KeyboardEvent) => {
+useSelectedCellKeydownListener(inject(ActiveCellInj, ref(false)), (e: KeyboardEvent) => {
   switch (e.key) {
     case 'Enter':
       if (listItemsDlg.value) return
@@ -140,7 +139,7 @@ watch(
 <template>
   <div class="nc-cell-field flex w-full group items-center nc-links-wrapper py-1" @dblclick.stop="openChildList">
     <LazyVirtualCellComponentsLinkRecordDropdown v-model:is-open="isOpen">
-      <div class="flex w-full group items-center">
+      <div class="flex w-full group items-center min-h-4">
         <div class="block flex-shrink truncate">
           <component
             :is="isUnderLookup ? 'span' : 'a'"
